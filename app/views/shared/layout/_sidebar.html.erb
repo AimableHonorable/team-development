@@ -40,7 +40,8 @@
 
                 <i class="right fa fa-angle-left "></i>
               </p>
-              <button class="btn float-right btn-danger p-auto rounded-pill"><%= link_to "delete", agenda, method: :delete, data: { confirm: 'are you sure?' } %></button>
+
+                <%= link_to "Delete", agenda, method: :delete, data: { confirm: 'are you sure?' }, class:"btn float-right btn-danger p-auto rounded rounded-pill" %>
             </a>
             <ul class="nav nav-treeview" style="display: block;">
               <% agenda.articles.each do |article| %>
