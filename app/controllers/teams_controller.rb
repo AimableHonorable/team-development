@@ -4,18 +4,22 @@ class TeamsController < ApplicationController
 
   def index
     @teams = Team.all
+
   end
 
   def show
     @working_team = @team
     change_keep_team(current_user, @team)
+
   end
 
   def new
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    @users = User.all
+  end
 
   def create
     @team = Team.new(team_params)
@@ -30,8 +34,14 @@ class TeamsController < ApplicationController
   end
 
   def update
-    if @team.update(team_params)
+    if params[:owner_id]
+      @team.update(owner_id: params[:owner_id])
+      user = User.find(@team.owner_id)
+      TeamLeaderMailer.team_leader_mail(user, @team).deliver
+      redirect_to @team, notice: 'new leader changed successfully'
+    elsif @team.update(team_params)
       redirect_to @team, notice: I18n.t('views.messages.update_team')
+
     else
       flash.now[:error] = I18n.t('views.messages.failed_to_save_team')
       render :edit
@@ -46,6 +56,19 @@ class TeamsController < ApplicationController
   def dashboard
     @team = current_user.keep_team_id ? Team.find(current_user.keep_team_id) : current_user.teams.first
   end
+
+  # def update_owner
+  #   if not current_user.id == @team.owner_id
+  #     redirect_to team_path(@team), notice: 'Only team leader can transfer authority'
+  #   else
+  #     @team.attributes = {owner_id: params[:team][:team_id]}
+  #     if @team.save(context: :change_owner)
+  #       redirect_to team_path(@team), notice: 'Team leader changed'
+  #     else
+  #       redirect_to team_path(@team), notice: 'Failed to transfer authority'
+  #     end
+  #   end
+  # end
 
   private
 
