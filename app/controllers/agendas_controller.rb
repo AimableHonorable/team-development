@@ -23,7 +23,6 @@ class AgendasController < ApplicationController
 
   def destroy
     if current_user.id == @agenda.user_id
-
       @agenda.destroy
       @agenda.team.members.each do |user|
         ContactMailer.contact_mail(user, @agenda).deliver
@@ -32,8 +31,6 @@ class AgendasController < ApplicationController
     else
       redirect_to dashboard_url, notice: 'Agenda not deleted. you must be the owner to delete that agenda'
     end
-
-
   end
 
   private

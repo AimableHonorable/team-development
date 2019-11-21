@@ -3,6 +3,7 @@ class Team < ApplicationRecord
   friendly_id :name
 
   validates :name, presence: true, uniqueness: true
+  # validates :is_owner_team_member, on: :change_owner
 
   belongs_to :owner, class_name: 'User', foreign_key: :owner_id
   has_many :assigns, dependent: :destroy
@@ -15,4 +16,9 @@ class Team < ApplicationRecord
   def invite_member(user)
     assigns.create(user: user)
   end
+  # def is_owner_team_member
+  #   if Team.find(id).members.find_by(id: owner_id).nil?
+  #     errors.add("", "this user is not a team member")
+  #   end
+  # end
 end
