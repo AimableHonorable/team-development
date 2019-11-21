@@ -1,7 +1,8 @@
 class ContactMailer < ApplicationMailer
-  def contact_mail(agenda)
+  def contact_mail(user, agenda)
+    @user = user
   @agenda = agenda
 
-  mail to: "example@mail.com", subject: "Agenda deleted"
+  mail to: user.email, subject: "Agenda deleted"
   end
 end
